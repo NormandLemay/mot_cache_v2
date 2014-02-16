@@ -1,0 +1,32 @@
+<script type="text/javascript">
+    function cSwap(cell){
+        if (cell.className == "vide")
+        {
+            cell.className = "plein";
+        }
+        else if (cell.className == "plein")
+        {
+            cell.className = "vide";
+        }
+    }
+</script>
+<div class="header">
+    Grilles : <a href="#">10 x 10</a> | <a href="#">15 x 15</a> | <a href="#">20 x 20</a>
+</div>
+<p class="textGridSize">Taille grille <a href="#" class="tgplus">+</a> <a href="#" class="tgmoin">-</a></p>
+<div class="container">
+    <p id="notice"><%= notice %></p>
+
+    <h3><%= @grilles.display_name %></h3>
+    <div class="grille">
+        <%= afficher_grille %>
+    </div>
+    <div id="mot_a_chercher">
+        <h2>Mots</h2>
+        <%= render 'liste_mots' %>
+    </div>
+</div>
+<!--<p id="notice"><%#= notice %></p>-->
+
+<%#= link_to 'Edit', edit_grille_path(@grille) %> |
+<!--<%#= link_to 'Back', grilles_path %>-->
