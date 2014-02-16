@@ -97,19 +97,19 @@ class Grille < ActiveRecord::Base
         end
     end
     lexique = ""
-    lexique = Lexique.find_by(:first, :conditions => "id not in (#{@liste_mot}) and mot GLOB '#{val}'", :order=>"RANDOM()")
-    lexique = Lexique.find_by(:first, :conditions => "id not in (#{@liste_mot}) and mot GLOB '#{val.first(val.length-1)}' ", :order=>"RANDOM()") if val.length-1 >=3 and !lexique
-    lexique = Lexique.find_by(:first, :conditions => "id not in (#{@liste_mot}) and mot GLOB '#{val.first(val.length-2)}' ", :order=>"RANDOM()") if val.length-2 >=3 and !lexique
-    lexique = Lexique.find_by(:first, :conditions => "id not in (#{@liste_mot}) and mot GLOB '#{val.first(val.length-3)}' ", :order=>"RANDOM()") if val.length-3 >=3 and !lexique
-    lexique = Lexique.find_by(:first, :conditions => "id not in (#{@liste_mot}) and mot GLOB '#{val.first(val.length-4)}' ", :order=>"RANDOM()") if val.length-4 >=3 and !lexique
-    lexique = Lexique.find_by(:first, :conditions => "id not in (#{@liste_mot}) and mot GLOB '#{val.first(val.length-5)}' ", :order=>"RANDOM()") if val.length-5 >=3 and !lexique
-    lexique = Lexique.find_by(:first, :conditions => "id not in (#{@liste_mot}) and mot GLOB '#{val.first(val.length-6)}' ", :order=>"RANDOM()") if val.length-6 >=3 and !lexique
-    lexique = Lexique.find_by(:first, :conditions => "id not in (#{@liste_mot}) and mot GLOB '#{val.first(val.length-7)}' ", :order=>"RANDOM()") if val.length-7 >=3 and !lexique
-    lexique = Lexique.find_by(:first, :conditions => "id not in (#{@liste_mot}) and mot GLOB '#{val.first(val.length-8)}' ", :order=>"RANDOM()") if val.length-8 >=3 and !lexique
-    lexique = Lexique.find_by(:first, :conditions => "id not in (#{@liste_mot}) and mot GLOB '#{val.first(val.length-9)}' ", :order=>"RANDOM()") if val.length-9 >=3 and !lexique
-    lexique = Lexique.find_by(:first, :conditions => "id not in (#{@liste_mot}) and mot GLOB '#{val.first(val.length-10)}' ", :order=>"RANDOM()") if val.length-10 >=3 and !lexique
-    lexique = Lexique.find_by(:first, :conditions => "id not in (#{@liste_mot}) and mot GLOB '#{val.first(val.length-11)}' ", :order=>"RANDOM()") if val.length-11 >=3 and !lexique
-    lexique = Lexique.find_by(:first, :conditions => "id not in (#{@liste_mot}) and mot GLOB '#{val.first(val.length-12)}' ", :order=>"RANDOM()") if val.length-12 >=3 and !lexique
+    lexique = Lexique.order("RANDOM()").find_by "id not in (#{@liste_mot}) and mot GLOB '#{val}'"
+    lexique = Lexique.order("RANDOM()").find_by "id not in (#{@liste_mot}) and mot GLOB '#{val.first(val.length-1)}' " if val.length-1 >=3 and !lexique
+    lexique = Lexique.order("RANDOM()").find_by "id not in (#{@liste_mot}) and mot GLOB '#{val.first(val.length-2)}' " if val.length-2 >=3 and !lexique
+    lexique = Lexique.order("RANDOM()").find_by "id not in (#{@liste_mot}) and mot GLOB '#{val.first(val.length-3)}' " if val.length-3 >=3 and !lexique
+    lexique = Lexique.order("RANDOM()").find_by "id not in (#{@liste_mot}) and mot GLOB '#{val.first(val.length-4)}' " if val.length-4 >=3 and !lexique
+    lexique = Lexique.order("RANDOM()").find_by "id not in (#{@liste_mot}) and mot GLOB '#{val.first(val.length-5)}' " if val.length-5 >=3 and !lexique
+    lexique = Lexique.order("RANDOM()").find_by "id not in (#{@liste_mot}) and mot GLOB '#{val.first(val.length-6)}' " if val.length-6 >=3 and !lexique
+    lexique = Lexique.order("RANDOM()").find_by "id not in (#{@liste_mot}) and mot GLOB '#{val.first(val.length-7)}' " if val.length-7 >=3 and !lexique
+    lexique = Lexique.order("RANDOM()").find_by "id not in (#{@liste_mot}) and mot GLOB '#{val.first(val.length-8)}' " if val.length-8 >=3 and !lexique
+    lexique = Lexique.order("RANDOM()").find_by "id not in (#{@liste_mot}) and mot GLOB '#{val.first(val.length-9)}' " if val.length-9 >=3 and !lexique
+    lexique = Lexique.order("RANDOM()").find_by "id not in (#{@liste_mot}) and mot GLOB '#{val.first(val.length-10)}' " if val.length-10 >=3 and !lexique
+    lexique = Lexique.order("RANDOM()").find_by "id not in (#{@liste_mot}) and mot GLOB '#{val.first(val.length-11)}' " if val.length-11 >=3 and !lexique
+    lexique = Lexique.order("RANDOM()").find_by "id not in (#{@liste_mot}) and mot GLOB '#{val.first(val.length-12)}' " if val.length-12 >=3 and !lexique
     @liste_mot = "#{@liste_mot},#{lexique.id}" if lexique
     if lexique
       return lexique.mot
@@ -123,7 +123,7 @@ class Grille < ActiveRecord::Base
     @liste_mot = "0"
     p "normand"
     p self.x
-    @nbr_lettre_cacher = [3...self.x].sample #prng.rand(3...self.x)
+    @nbr_lettre_cacher = prng.rand(3...self.x)
     begin
 
       sortir = "n"
@@ -187,7 +187,7 @@ class Grille < ActiveRecord::Base
   def mot_cacher
    # Rails.logger.debug "normand mot_cacher nbr_case_restant : #{@nbr_case_restant}"
     nbr_lettre = 0
-    lexique = Lexique.find_by(:first, :conditions => "id not in (#{@liste_mot}) and nbr_lettre ='#{@nbr_case_restant}'", :order=>"RANDOM()")
+    lexique = Lexique.order("RANDOM()").find_by "id not in (#{@liste_mot}) and nbr_lettre ='#{@nbr_case_restant}'"
 
    # Rails.logger.debug "normand mot cacher: #{lexique.mot}"
     @mot_cache = lexique.id

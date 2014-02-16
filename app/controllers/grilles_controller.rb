@@ -71,6 +71,7 @@ class GrillesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def grille_params
-      params[@grille]
+      params.require(:grille).permit(:name, :x, :y)
+      #params[@grille]
     end
 end

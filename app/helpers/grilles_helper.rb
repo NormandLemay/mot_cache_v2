@@ -10,7 +10,7 @@ module GrillesHelper
   end
 
   def afficher_liste_mots
-    liste = Lexique.obtenir_liste_mot(@grilles.listes_mots)
+    liste = Lexique.obtenir_liste_mot(@grille.listes_mots)
     result =""
     liste.each_slice(liste.count()/3)do |mots|
       result +="<div id='left'>"
@@ -25,10 +25,10 @@ module GrillesHelper
   def afficher_grille
     result =""
     result += "<table border='1'>"
-    (0...@grilles.y).each do |y|
+    (0...@grille.y).each do |y|
       result += "<tr>"
-      (0...@grilles.x).each do |x|
-        result+="<td class='vide' width='20' align='center' height='20' onclick='cSwap(this);'>#{@grilles.get_val_x_y(x,y).upcase}</td>"
+      (0...@grille.x).each do |x|
+        result+="<td class='vide' width='20' align='center' height='20' onclick='cSwap(this);'>#{@grille.get_val_x_y(x,y).upcase}</td>"
       end
       result+="</tr>"
     end

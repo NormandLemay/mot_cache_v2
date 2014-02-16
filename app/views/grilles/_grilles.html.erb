@@ -1,9 +1,10 @@
 <%= will_paginate @grilles %>
 
 <% for grille in @grilles %>
-      <h4>
+    <h4>
         <%= link_to h(grille.display_name), grille %>
-      </h4>
-        <%= link_to_destroy "Destroy", grille_path(grille), confirm_destroy_grille_path(grille)%>
+    </h4>
+    <%= link_to 'Destroy', grille, method: :delete, data: {confirm: 'Are you sure?'} %>
+    <%#=  "Destroy", grille_path(grille), confirm_destroy_grille_path(grille)%>
 <% end %>
 <%= will_paginate @grilles %>
