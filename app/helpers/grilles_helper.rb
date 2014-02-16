@@ -13,7 +13,7 @@ module GrillesHelper
     liste = Lexique.obtenir_liste_mot(@grille.listes_mots)
     result =""
     liste.each_slice(liste.count()/3)do |mots|
-      result +="<div id='left'>"
+      result +="<div id='right'>"
       mots.each do |mot|
         result +="<span class='vide' onclick='cSwap(this)'>#{mot}</span><br>"
       end
