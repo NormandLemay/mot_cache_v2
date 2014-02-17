@@ -4,11 +4,12 @@ class LexiquesController < ApplicationController
   # GET /lexiques
   # GET /lexiques.json
   def index
-    @lexiques = Lexique.paginate(:per_page => 20, :page => params[:page], :order => "mot asc")
+    @lexiques = Lexique.search(params[:search], params[:page])
+    #@lexiques = Lexique.paginate(:per_page => 20, :page => params[:page], :order => "mot asc")
   end
 
-  # GET /lexiques/1
-  # GET /lexiques/1.json
+#  GET /lexiques/1
+#  GET /lexiques/1.json
   def show
   end
 
@@ -21,8 +22,8 @@ class LexiquesController < ApplicationController
   def edit
   end
 
-  # POST /lexiques
-  # POST /lexiques.json
+#  POST /lexiques
+#  POST /lexiques.json
   def create
     @lexique = Lexique.new(lexique_params)
 
@@ -51,8 +52,8 @@ class LexiquesController < ApplicationController
     end
   end
 
-  # DELETE /lexiques/1
-  # DELETE /lexiques/1.json
+#  DELETE /lexiques/1
+#  DELETE /lexiques/1.json
   def destroy
     @lexique.destroy
     respond_to do |format|

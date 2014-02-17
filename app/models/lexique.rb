@@ -8,12 +8,12 @@ class Lexique < ActiveRecord::Base
 
   def self.search(search, page)
     paginate :per_page => 5, :page => page,
-             :conditions => ['mot like ?', "%#{search}%"], :order => 'mot'
+             :conditions => ['mot like ?', "%#{search}%"], :order => 'mot asc'
   end
 
   def self.obtenir_liste_mot(ids)
     liste = []
-    lexiques = Lexique.find(:all, :conditions => "id in (#{ids})", :order => "mot asc")
+    lexiques = Lexique.order('mot asc').find(ids.split(','))
     lexiques.each {|lexique| liste << lexique.mot}
     liste
   end

@@ -15,6 +15,7 @@ MotCacheV2::Application.routes.draw do
   #   resources :products
   resources :grilles
   resources :lexiques
+  resources :search_lexiques
 
   # Example resource route with options:
   #   resources :products do
