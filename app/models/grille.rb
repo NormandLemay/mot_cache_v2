@@ -7,38 +7,38 @@ class Grille < ActiveRecord::Base
     "#{name} #{x} X #{y}"
   end
 
-  def get_val_x_y(x,y)
+  def get_val_x_y(x, y)
     matrice[x][y]
   end
 
-  def build_requete_et_retourne_mot(sense,x,y)
+  def build_requete_et_retourne_mot(sense, x, y)
     val = ""
     pos_x = x
     pos_y = y
     case sense
       when 0 #horizontal_droite
         (x...self.x).each do |x|
-          val = val + get_val_x_y(x,y)
+          val = val + get_val_x_y(x, y)
         end
       when 1 #horizontal_gauche
         (0..pos_x).each do
-          val = val + get_val_x_y(x,y)
+          val = val + get_val_x_y(x, y)
           x -=1
         end
       when 2 #vertical bas
         (pos_y...self.x).each do
-          val = val + get_val_x_y(x,y)
+          val = val + get_val_x_y(x, y)
           y +=1
         end
       when 3 #vertical haut
         (0..pos_y).each do
-          val = val + get_val_x_y(x,y)
+          val = val + get_val_x_y(x, y)
           y -=1
         end
       when 4 #diagonale_droite_bas
         if x < (self.x-2) or y < (self.x-2)
           (pos_x..((self.x-1)-pos_y)).each do
-            val = val + get_val_x_y(x,y)
+            val = val + get_val_x_y(x, y)
             y += 1
             x += 1
           end
@@ -47,13 +47,13 @@ class Grille < ActiveRecord::Base
         if x < (self.x-2) or y > 1
           if x + y <= (self.x-1)
             (0..(pos_y)).each do
-              val = val + get_val_x_y(x,y)
+              val = val + get_val_x_y(x, y)
               y -= 1
               x += 1
             end
           else
             (pos_x...self.x).each do
-              val = val + get_val_x_y(x,y)
+              val = val + get_val_x_y(x, y)
               y -= 1
               x += 1
             end
@@ -63,13 +63,13 @@ class Grille < ActiveRecord::Base
         if x > 1 or y < (self.x-2)
           if x + y <= (self.x-1)
             (0..pos_x).each do
-              val = val + get_val_x_y(x,y)
+              val = val + get_val_x_y(x, y)
               y += 1
               x -= 1
             end
           else
             (pos_y...self.x).each do
-              val = val + get_val_x_y(x,y)
+              val = val + get_val_x_y(x, y)
               y += 1
               x -= 1
             end
@@ -79,13 +79,13 @@ class Grille < ActiveRecord::Base
         if x > 1 or y > 1
           if y > x
             (0..pos_x).each do
-              val = val + get_val_x_y(x,y)
+              val = val + get_val_x_y(x, y)
               y -= 1
               x -= 1
             end
           else
             (0..pos_y).each do
-              val = val + get_val_x_y(x,y)
+              val = val + get_val_x_y(x, y)
               y -= 1
               x -= 1
             end
@@ -93,10 +93,10 @@ class Grille < ActiveRecord::Base
         end
       else
         (x...self.x).each do |x|
-          val = val + get_val_x_y(x,y)
+          val = val + get_val_x_y(x, y)
         end
     end
-    lexique = ""
+    lexique = ''
     lexique = Lexique.order("RANDOM()").find_by "id not in (#{@liste_mot}) and mot GLOB '#{val}'"
     lexique = Lexique.order("RANDOM()").find_by "id not in (#{@liste_mot}) and mot GLOB '#{val.first(val.length-1)}' " if val.length-1 >=3 and !lexique
     lexique = Lexique.order("RANDOM()").find_by "id not in (#{@liste_mot}) and mot GLOB '#{val.first(val.length-2)}' " if val.length-2 >=3 and !lexique
@@ -110,7 +110,11 @@ class Grille < ActiveRecord::Base
     lexique = Lexique.order("RANDOM()").find_by "id not in (#{@liste_mot}) and mot GLOB '#{val.first(val.length-10)}' " if val.length-10 >=3 and !lexique
     lexique = Lexique.order("RANDOM()").find_by "id not in (#{@liste_mot}) and mot GLOB '#{val.first(val.length-11)}' " if val.length-11 >=3 and !lexique
     lexique = Lexique.order("RANDOM()").find_by "id not in (#{@liste_mot}) and mot GLOB '#{val.first(val.length-12)}' " if val.length-12 >=3 and !lexique
-    @liste_mot = "#{@liste_mot},#{lexique.id}" if lexique
+    if @liste_mot == '0' && lexique
+      @liste_mot = "#{lexique.id}"
+    elsif lexique
+      @liste_mot = "#{@liste_mot},#{lexique.id}"
+    end
     if lexique
       return lexique.mot
     else
@@ -120,21 +124,19 @@ class Grille < ActiveRecord::Base
 
   def remplir_grille(prng)
     autre = 0
-    @liste_mot = "0"
-    p "normand"
-    p self.x
+    @liste_mot = '0'
     @nbr_lettre_cacher = prng.rand(3...self.x)
     begin
 
-      sortir = "n"
+      sortir ='n'
       bibi = 0
       begin
         begin
           x = prng.rand(0...self.x)
           y = prng.rand(0...self.x)
-        end while get_val_x_y(x,y) != "?"
+        end while get_val_x_y(x, y) != "?"
         sense = prng.rand(0..7)
-        mot = build_requete_et_retourne_mot(sense,x,y)
+        mot = build_requete_et_retourne_mot(sense, x, y)
 
         if mot
           sortir = "o"
@@ -146,34 +148,34 @@ class Grille < ActiveRecord::Base
       if sortir == "o"
         case sense
           when 0
-            horizontal_droite(mot,x,y)
+            horizontal_droite(mot, x, y)
           when 1
-            horizontal_gauche(mot,x,y)
+            horizontal_gauche(mot, x, y)
           when 2
-            vertical_bas(mot,x,y)
+            vertical_bas(mot, x, y)
           when 3
-            vertical_haut(mot,x,y)
+            vertical_haut(mot, x, y)
           when 4
-            diagonale_droite_bas(mot,x,y)
+            diagonale_droite_bas(mot, x, y)
           when 5
-            diagonale_droite_haut(mot,x,y)
+            diagonale_droite_haut(mot, x, y)
           when 6
-            diagonale_gauche_bas(mot,x,y)
+            diagonale_gauche_bas(mot, x, y)
           when 7
-            diagonale_gauche_haut(mot,x,y)
+            diagonale_gauche_haut(mot, x, y)
           else
-            horizontal_droite(mot,x,y)
+            horizontal_droite(mot, x, y)
         end
       end
 
-    @nbr_case_restant  = 0
-    matrice.each do |lettres|
-      lettres.each do |lettre|
-        if lettre.include?("?")
-          @nbr_case_restant  += 1
+      @nbr_case_restant = 0
+      matrice.each do |lettres|
+        lettres.each do |lettre|
+          if lettre.include?("?")
+            @nbr_case_restant += 1
+          end
         end
       end
-    end
       if autre >= 150 or @nbr_case_restant <= @nbr_lettre_cacher
         sortir = "c"
       end
@@ -185,15 +187,15 @@ class Grille < ActiveRecord::Base
   end
 
   def mot_cacher
-   # Rails.logger.debug "normand mot_cacher nbr_case_restant : #{@nbr_case_restant}"
+    # Rails.logger.debug "normand mot_cacher nbr_case_restant : #{@nbr_case_restant}"
     nbr_lettre = 0
     lexique = Lexique.order("RANDOM()").find_by "id not in (#{@liste_mot}) and nbr_lettre ='#{@nbr_case_restant}'"
 
-   # Rails.logger.debug "normand mot cacher: #{lexique.mot}"
+    # Rails.logger.debug "normand mot cacher: #{lexique.mot}"
     @mot_cache = lexique.id
     (0...self.x).each do |y|
       (0...self.x).each do |x|
-        if get_val_x_y(x,y) == "?"
+        if get_val_x_y(x, y) == "?"
           matrice[x.to_i][y.to_i] = lexique.mot[nbr_lettre]
           nbr_lettre +=1
         end
@@ -201,35 +203,35 @@ class Grille < ActiveRecord::Base
     end
   end
 
-  def horizontal_droite(mot,position_x,position_y)
+  def horizontal_droite(mot, position_x, position_y)
     mot.each_char do |val|
       matrice[position_x.to_i][position_y.to_i] = val
       position_x += 1
     end
   end
 
-  def horizontal_gauche(mot,position_x,position_y)
+  def horizontal_gauche(mot, position_x, position_y)
     mot.each_char do |val|
       matrice[position_x.to_i][position_y.to_i] = val
       position_x -= 1
     end
   end
 
-  def vertical_bas(mot,position_x,position_y)
+  def vertical_bas(mot, position_x, position_y)
     mot.each_char do |val|
       matrice[position_x.to_i][position_y.to_i] = val
       position_y += 1
     end
   end
 
-  def vertical_haut(mot,position_x,position_y)
+  def vertical_haut(mot, position_x, position_y)
     mot.each_char do |val|
       matrice[position_x.to_i][position_y.to_i] = val
       position_y -= 1
     end
   end
 
-  def diagonale_droite_bas(mot,position_x,position_y)
+  def diagonale_droite_bas(mot, position_x, position_y)
     mot.each_char do |val|
       matrice[position_x.to_i][position_y.to_i] = val
       position_y += 1
@@ -237,7 +239,7 @@ class Grille < ActiveRecord::Base
     end
   end
 
-  def diagonale_droite_haut(mot,position_x,position_y)
+  def diagonale_droite_haut(mot, position_x, position_y)
     mot.each_char do |val|
       matrice[position_x.to_i][position_y.to_i] = val
       position_y -= 1
@@ -245,7 +247,7 @@ class Grille < ActiveRecord::Base
     end
   end
 
-  def diagonale_gauche_bas(mot,position_x,position_y)
+  def diagonale_gauche_bas(mot, position_x, position_y)
     mot.each_char do |val|
       matrice[position_x.to_i][position_y.to_i] = val
       position_y += 1
@@ -253,7 +255,7 @@ class Grille < ActiveRecord::Base
     end
   end
 
-  def diagonale_gauche_haut(mot,position_x,position_y)
+  def diagonale_gauche_haut(mot, position_x, position_y)
     mot.each_char do |val|
       matrice[position_x.to_i][position_y.to_i] = val
       position_y -= 1
@@ -266,7 +268,7 @@ class Grille < ActiveRecord::Base
   def init_matrice
     if self.x
       @matrice = []
-      (1..self.x).each {@matrice << ["?"] * self.x }
+      (1..self.x).each { @matrice << ["?"] * self.x }
     end
   end
 
@@ -276,7 +278,7 @@ class Grille < ActiveRecord::Base
     else
       @matrice
     end
-     @matrice
+    @matrice
   end
 
   def grid_name

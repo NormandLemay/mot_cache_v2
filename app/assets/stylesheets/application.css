@@ -75,6 +75,6 @@ h3{margin: 10px 0 2px 0;}
 }
 
 #mot_a_chercher{overflow: hidden; width: 620px; background: #fff url(fond-listeMot.gif) repeat-x 0 10px;}
-#mot_a_chercher #right{float: right; width: 175px; padding: 0 10px}
-#mot_a_chercher #right span:hover{cursor: pointer;}
-#mot_a_chercher #right span.plein{text-decoration: line-through;}
+#mot_a_chercher #left{float: left; width: 175px; padding: 0 10px}
+#mot_a_chercher #left span:hover{cursor: pointer;}
+#mot_a_chercher #left span.plein{text-decoration: line-through;}
